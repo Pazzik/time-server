@@ -1,16 +1,24 @@
 require 'geokit'
-require "nearest_time_zone"
+require 'nearest_time_zone'
 require 'tzinfo'
-require "socket" 
+require 'socket'
+require 'lrucache'
+
+$cache = LRUCache.new(:max_size => 100, :default => nil)
 
 def get_time(locations)
   time = Time.new.utc.strftime "%Y-%m-%d %H:%M:%S" 
   result = ["UTC: #{time}"]
 
   locations.split(',').compact.each do |location|
-    res = Geokit::Geocoders::GoogleGeocoder.geocode(location)
-    timezone_name = NearestTimeZone.to(res.lat,res.lng)
-    zone = TZInfo::Timezone.get(timezone_name) 
+    if $cache[location].nil?
+      res = Geokit::Geocoders::GoogleGeocoder.geocode(location)
+      timezone_name = NearestTimeZone.to(res.lat,res.lng)    
+      zone = TZInfo::Timezone.get(timezone_name) 
+      $cache[location] = zone
+    else
+      zone = $cache[location]
+    end
     time = zone.now.strftime "%Y-%m-%d %H:%M:%S" 
     result << "#{location.strip}: #{time}"
   end
