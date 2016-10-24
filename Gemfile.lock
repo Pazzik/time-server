@@ -8,16 +8,8 @@ GEM
       andand
       kdtree
       require_all
-    rack (1.6.4)
-    rack-protection (1.5.3)
-      rack
     require_all (1.3.3)
-    sinatra (1.4.7)
-      rack (~> 1.5)
-      rack-protection (~> 1.4)
-      tilt (>= 1.3, < 3)
     thread_safe (0.3.5)
-    tilt (2.0.5)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
 
@@ -27,8 +19,7 @@ PLATFORMS
 DEPENDENCIES
   geokit
   nearest_time_zone
-  sinatra
   tzinfo
 
 BUNDLED WITH
-   1.13.1
+   1.13.3
